@@ -1,0 +1,88 @@
+<!--opcion 1-->
+<dai-map :center="[x,y]" :zoom="10" >
+    <layers>
+        <basemap-layer type="OpenStreetMap"/>
+        <geojson-layer id="estados" source="ruta/al/geojson" :layer-style="{...style}" tooltip-content="Cuerpo del tooltip"/>
+        <geojson-layer id="municipios" source="ruta/al/geojson" visible="false"/>
+        <geoserver-layer name="vacunacion:hospitales"/>
+    </layers>
+    <controls position="header">
+        <title>Este es el titulo del mapa</title>
+        <resume>Esta es la descripcion del mapa</resume>
+        <searcher :for-layer="[estados,municipios]"/ >
+        <map-selector  @change="accion1"> <!--componente personalizado para que acceda al mapa que pertenece-->
+            <option value="acciones 1" >Variable 1</option>
+            <option value="acciones 2" >Variable 2</option>
+        </map-selector>
+    </controls>
+    <controls position="footer">
+        <leyenda for="estados" />
+        <opacity for="municipios" :value=".5"/>
+        <notas collapsed="false">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Perspiciatis temporibus necessitatibus explicabo illum, laboriosam minus eos saepe vitae non recusandae quasi voluptatum porro amet consequuntur sapiente, impedit omnis! Commodi, corporis!</notas>
+
+    </controls>
+</dai-map>
+
+<script>
+    export default{
+        methods:{
+            accion1:function(evento,mapObject){
+                //aplicar alguna accion a mapObject segun el valor seleccionado
+                //por ejemplo mapObject.layers["estados"].setVisible(false)
+            }
+        }
+    }
+</script>
+
+<!--opcion 2-->
+
+<dai-map :options="options1"></dai-map>
+
+<script>
+    export default {
+        data:function(){
+            return {
+                //El objeto de configuracion
+                options1:{
+                    layers:[
+                        {
+                            source:"ruta/to/geojson",
+                            id:"miguel",
+                            style:{}
+                        },
+                        {
+                            source:"ruta/to/geojson",
+                            id:"miguel",
+                            style:{}
+                        }
+                    ],
+                    controles:{
+
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+
+<!--opcion 3-->
+
+<dai-map-container> <!--contenedor que a la vez da el estilo de card -->
+    <dai-map-header>
+        <!--html a necesidad y/o componentes que puedan acceder al mapa-->
+        <h2>el titulo</h2>
+    </dai-map-header>
+    
+    <!--mapa que bien podria ser independiente-->
+    <dai-map>
+        <geojson-layer></geojson-layer>
+        <geojson-layer></geojson-layer>
+        <other-layer create="createLayerFunction"  ></other-layer>
+    </dai-map>
+    <dai-map-footer>
+        <!--html a necesidad y/o componentes que puedan acceder al mapa -->
+        <legend></legend>
+    </dai-map-footer>
+
+</dai-map-container>
