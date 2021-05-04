@@ -28,10 +28,35 @@
 }
 
 .map-zoom-all-control{
-    top: 5rem;
-    left: .5rem;
+    right: .5rem;
+    bottom: calc(.5rem + 62px);
     font-size: 10px;
+    border-radius: 15px 15px 0 0;
+    button{
+        border-radius: 15px 15px 0 0;
+    }
 }
+
+.ol-zoom{
+    top: auto;
+    left: auto;
+    bottom: .5rem;
+    right: .5rem;
+    border-radius: 0 0 15px 15px;
+    button.ol-zoom-out{
+        border-radius: 0 0 15px 15px;
+    }
+    button.ol-zoom-in{
+        border-radius: 0 ;
+    }
+}
+.ol-control{
+    padding: 0px;
+    //border-radius: 0;
+}
+
+
+
 
 .ol-attribution{
     font-size: .8rem;

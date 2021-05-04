@@ -10,7 +10,7 @@ export default {
     props:{
         ...defaultProps,
         source:{
-            type:String,
+            type:[String,Object],
             default:"",
             required:true
         },
@@ -59,11 +59,12 @@ export default {
                 }
             }
             
+            let vectorSource = typeof vm.source == "object" 
+                ? new VectorSource({features: new GeoJSON().readFeatures(vm.source),})
+                : new VectorSource({url: vm.source,format: new GeoJSON()})
+
             let layer = new VectorLayer({
-                source:new VectorSource({
-                    url: vm.source,
-                    format: new GeoJSON()
-                }),
+                source: vectorSource,
                 visible:vm.visible,
                 style:style,
                 opacity: vm.opacity,
