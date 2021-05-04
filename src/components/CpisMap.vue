@@ -7,12 +7,12 @@
         <dai-basic-map  class="dai-map" :maxZoom="18" :extent="[-118.365119934082,14.5320978164673,-86.7104034423828,32.7186546325684]">
             
             <dai-geojson-layer
-                source="capas/estados.geojson"
+                :source="estadosLayer"
                 :olstyle="estados_style"
                 :opacity="1"
                 />
             <dai-geojson-layer
-                source="capas/cpi_30abril21.geojson"
+                :source="cpisLayer"
                 :olstyle="cpis_style"
                 
                 :tooltipContent="popupCpis"/>
@@ -33,6 +33,8 @@
 <script>
 import DaiBasicMap from "./basic-map/basic-map"
 import DaiGeojsonLayer from "./basic-map/layers/geojson-layer"
+import estados from "../assets/capas/estados.json"
+import cpis from "../assets/capas/cpi_30abril21.json"
 
 export default {
     components:{
@@ -40,6 +42,8 @@ export default {
     },
     data:function(){
         return{
+            estadosLayer:estados,
+            cpisLayer:cpis,
             popupCpis:(row)=>{
                 //preparar la direccion 
                 let nuevaDireccion = formatoDireccion(row.direccion)
