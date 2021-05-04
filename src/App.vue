@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-3">
     <div class="columns is-centered">
-      <div class="column is-8">
+      <div class="column is-7">
         <cpis-map/>
       </div>
     </div>
@@ -32,4 +32,6 @@ export default {
 .dai-map{
   height: 500px;
 }
+
+
 </style>
