@@ -1,17 +1,13 @@
 <template>
-  <div class="container mt-3">
-    <div class="columns is-centered">
-      <div class="column is-7">
+  
         <cpis-map/>
-      </div>
-    </div>
-  </div>
+      
   
 </template>
 
 <script>
-import CpisMap from "./components/CpisMap.vue"
-
+import CpisMap from "./components/CpisMap.vue";
+import "./estilos.scss";
 export default {
   name: 'App',
   components: {
@@ -30,8 +26,10 @@ export default {
   margin-top: 60px;
 }
 .dai-map{
-  height: 500px;
+  height: 100%;
+  width: 100%;
 }
+
 
 
 </style>

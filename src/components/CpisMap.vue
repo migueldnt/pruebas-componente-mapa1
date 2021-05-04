@@ -1,9 +1,6 @@
 <template>
-    <div class="custom-box">
-        <div class="description">
-            <h4 class="title is-4">Centros Públicos de Investigación</h4>
-            <p > Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo vel laboriosam totam sunt ex error. Eveniet nihil nostrum doloremque esse ut accusamus excepturi optio, nulla incidunt explicabo illo quibusdam in.</p>
-        </div>
+    <div class="embed">
+        
         <dai-basic-map  class="dai-map" :maxZoom="18" :extent="[-118.365119934082,14.5320978164673,-86.7104034423828,32.7186546325684]">
             
             <dai-geojson-layer
@@ -18,14 +15,7 @@
                 :tooltipContent="popupCpis"/>
         </dai-basic-map>
         
-            <a href="#" class="footer-button">
-                <span>Centros Públicos de Investigación</span>
-                <div class="arrow-container">
-                    <div class="arrow"></div>
-                </div>
-                
-            </a>
-        
+            
     </div>
     
 </template>
@@ -90,7 +80,11 @@ function truncate(str, n){
 </script>
 
 <style lang="scss" scoped>
-
+.embed{
+    height: 100%;
+    width: 100%;
+    background-color: #032663;
+}
 .custom-box{
     background-color: #032663;
     border-radius: 16px;
@@ -110,11 +104,7 @@ function truncate(str, n){
     }
 }
 
-.dai-map{
-    height: 500px;
-    border-top: .5px solid white;
-    border-bottom: .5px solid white;
-}
+
 .arrow-container{
     padding-top: .7rem;
 }
