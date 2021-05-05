@@ -20,6 +20,9 @@
         if (f_l) {
             var layer = f_l[1];
             var feature = f_l[0];
+            if(map.hover_feature == feature){
+                return 
+            }
             if (capas_con_tooltip.includes(layer.get("id")) &&  layer.get("_tooltip")!=undefined ) {
                 //hightlight_on_hover(f_l[0]);
                 //if (layers[layer.get("name")].highlight_accessor != undefined) {
@@ -65,6 +68,7 @@
                 tooltip_overlay.setPosition(undefined)
                 //tooltipelement.classList.remove("show")
             }
+            map.hover_feature = feature;
         } else {
 
             tooltip_overlay.setPosition(undefined)
@@ -74,5 +78,6 @@
         map.getTargetElement().style.cursor = '';
         tooltip_overlay.setPosition(undefined)
         //tooltipelement.classList.remove("show")
+        map.hover_feature = undefined;
     }
 }

@@ -53,7 +53,8 @@ export default {
             layers:{},
             map:null,
             hasInitialExtent:false,
-            highlight_feature:undefined
+            highlight_feature:undefined,
+            hover_feature:undefined
         }
     },
     mounted:function(){

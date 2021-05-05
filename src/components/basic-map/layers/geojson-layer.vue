@@ -105,8 +105,8 @@ export default {
 const serializedStyleIfHighlight=function(serializedStyle){
     let serialized2= JSON.parse(JSON.stringify(serializedStyle))
     if("stroke" in serialized2["style"]){
-        serialized2["style"]["stroke"]["color"] = "black"
-        serialized2["style"]["stroke"]["width"] = 2
+        serialized2["style"]["stroke"]["color"] = "gray"
+        serialized2["style"]["stroke"]["width"] = 3
         serialized2["style"]["zIndex"] = 2;
     } 
     //console.log(serializedStyle,serialized2)

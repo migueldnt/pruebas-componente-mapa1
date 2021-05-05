@@ -10,6 +10,7 @@
                 :source="estadosLayer"
                 :olstyle="estados_style"
                 :opacity="1"
+                :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> Cantidad de centros: ${row.count_cpis}`"
                 />
             <dai-geojson-layer
                 :source="cpisLayer"
@@ -44,12 +45,16 @@ export default {
         return{
             estadosLayer:estados,
             cpisLayer:cpis,
+            cpiHoverActual:null,
             popupCpis:(row)=>{
+                
+                
                 //preparar la direccion 
                 let nuevaDireccion = formatoDireccion(row.direccion)
                 let telefono = formatPhoneNumber(row.tel_oficin);
                 let pagina = `<a target="_blank" href="${row.pagina}">${truncate(row.pagina,32)}</a>`;
-                return `<strong>${row.descripcio}</strong><br>${nuevaDireccion}<br>Telefono: ${telefono}<br>${pagina}`
+                this.cpiHoverActual=row.oid
+                return `<div><img src="logos/${row.logo}" class="icon-cpi"></div><strong>${row.descripcio}</strong><br>${nuevaDireccion}<br>Telefono: ${telefono}<br>${pagina}`
             },
             estados_style:{
                 style:{
@@ -150,5 +155,11 @@ function truncate(str, n){
     top: -4px;
     transform: rotate(45deg);
   }
+}
+</style>
+<style>
+.icon-cpi{
+    height: 30px;
+    width: auto;
 }
 </style>
