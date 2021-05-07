@@ -17,14 +17,14 @@
                 @click_feature="acercamiento_edo"
                 :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> Cantidad de centros: ${row.count_cpis}`"
                 />
+            <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_only_labels/{z}/{x}/{y}.png"/>
             <dai-geojson-layer
                 id="cpis"
                 :source="cpisLayer"
                 :olstyle="cpis_style"
                 @click_feature="acercamiento_cpi"
                 :tooltipContent="popupCpis"/>
-            <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_only_labels/{z}/{x}/{y}.png"/>
-
+            <button class="button-alterna-calles" :class="{'active':xyz_visible}" @click="xyz_visible=!xyz_visible">Ver mapa de calles</button>
         </dai-basic-map>
         
             <a href="#" class="footer-button">
@@ -182,6 +182,22 @@ function truncate(str, n){
     top: -4px;
     transform: rotate(45deg);
   }
+}
+
+.button-alterna-calles{
+    position: absolute;
+    left: .5rem;
+    bottom: .5rem;
+    background-color: #0062FF;
+    color: white;
+    border-color:white;
+    border-width: 1px;
+    border-style: hidden;
+    border-radius: 3px;
+    cursor: pointer;
+    &.active{
+        border-style: solid;
+    }
 }
 </style>
 <style>
