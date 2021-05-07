@@ -5,7 +5,7 @@ module.exports = {
     configureWebpack:{
         plugins:[
             new CopyPlugin([
-                { from: "src/assets/capas/", to: "capas/" }
+                { from: "src/assets/logos/", to: "logos/" }
             ])
         ]
     }

@@ -35,6 +35,7 @@
             var feature = f_l[0];
 
             let id = layer.get("id")
+            console.log(id,"el layer id")
             component.layers[id].$emit("click_feature",f_l)
             hightlight_on_click(feature)
             if(feature.getGeometry().getType()=="Point"){

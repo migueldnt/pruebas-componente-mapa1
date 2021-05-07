@@ -28,6 +28,10 @@ export default {
                 return {} //deefinir un estilo global por default
             }
         },
+        movibleTooltip:{
+            type:Boolean,
+            default:false
+        },
         _clicks:{
             type:Number,
             default:0
@@ -75,6 +79,8 @@ export default {
             if(vm.tooltipContent!="none"){
                 
                 layer.set("_tooltip",vm.tooltipContent)
+                layer.set("_tooltip_mov",vm.movibleTooltip)
+                
             }
 
             if(vm.popupContent!="none"){
@@ -95,7 +101,7 @@ export default {
         return null
     },
     model:{
-        event:"click-feature",
+        event:"click_feature",
         prop: "_clicks"
     },
     inject:["layer_register"]
@@ -105,8 +111,8 @@ export default {
 const serializedStyleIfHighlight=function(serializedStyle){
     let serialized2= JSON.parse(JSON.stringify(serializedStyle))
     if("stroke" in serialized2["style"]){
-        serialized2["style"]["stroke"]["color"] = "black"
-        serialized2["style"]["stroke"]["width"] = 2
+        serialized2["style"]["stroke"]["color"] = "gray"
+        serialized2["style"]["stroke"]["width"] = 3
         serialized2["style"]["zIndex"] = 2;
     } 
     //console.log(serializedStyle,serialized2)
