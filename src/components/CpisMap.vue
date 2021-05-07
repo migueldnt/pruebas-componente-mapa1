@@ -1,7 +1,7 @@
 <template>
     <div class="custom-box">
         <div class="description">
-            <h4 class="title is-4">Centros Públicos de Investigación</h4>
+            <h4 class="title is-4">Centros Públicos de Investigación y Laboratorios Nacionales</h4>
             <p > Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo vel laboriosam totam sunt ex error. Eveniet nihil nostrum doloremque esse ut accusamus excepturi optio, nulla incidunt explicabo illo quibusdam in.</p>
         </div>
         <dai-basic-map  class="dai-map" :maxZoom="18" 
@@ -15,7 +15,7 @@
                 :opacity="1"
                 :movible-tooltip="true"
                 @click_feature="acercamiento_edo"
-                :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> Cantidad de centros: ${row.count_cpis}<br>Cantidad de laboratorios: ${row.count_lab_nal}`"
+                :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> CPI: ${row.count_cpis}<br>Laboratorios Nacionales: ${row.count_lab_nal}`"
                 />
             <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/light_only_labels/{z}/{x}/{y}.png"/>
             <dai-geojson-layer
@@ -31,9 +31,17 @@
                 :olstyle="labsStyle"
                 :tooltipContent="popupLabs"
                 @click_feature="acercamiento_cpi"
-                :tooltipTop="1"
+                :tooltipTop="2"
                 />
             <button class="button-alterna-calles" :class="{'active':xyz_visible}" @click="xyz_visible=!xyz_visible">Ver mapa de calles</button>
+            <div class="leyenda">
+                <div class="item-leyenda">
+                    <span class="icon-pin"></span> Centros Públicos de Investigación
+                </div>
+                <div class="item-leyenda">
+                    <i class="icon-circle"></i> Laboratorios Nacionales
+                </div>
+            </div>
         </dai-basic-map>
         
             <a href="#" class="footer-button">
@@ -96,7 +104,7 @@ export default {
                         anchorXUnits: 'fraction',
                         anchorYUnits: 'fraction',
                         src: 'logos/puntero-mapa.svg',
-                        scale:.4,
+                        //scale:.4,
                         offset: [0,0],
                         //size: [40,40]
                     }
@@ -229,6 +237,42 @@ function truncate(str, n){
     cursor: pointer;
     &.active{
         border-style: solid;
+    }
+}
+.leyenda{
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    background-color: #0062FF;
+    padding: .3rem;
+    border-radius: 5px;
+    .item-leyenda{
+        font-size: 13px;
+        color: white;
+        .icon-pin:before{
+            content:'';
+            width: 18px;
+            height: 18px;
+            background-image: url(/logos/puntero-mapa.svg) ;
+            top: 4px;
+            left: 0px;
+            display: inline-block;
+            background-size: cover;
+            position: relative;
+        }
+        .icon-circle:before{
+            content:'';
+            width: 11px;
+            height: 11px;
+            background-color: white;
+            top: 2px;
+            left: 4px;
+            margin-right: 6px;
+            display: inline-block;
+            //background-size: cover;
+            position: relative;
+            border-radius: 50%;
+        }
     }
 }
 </style>
