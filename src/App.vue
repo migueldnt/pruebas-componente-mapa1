@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-3">
     <div class="columns is-centered">
-      <div class="column is-7">
+      <div class="column is-8">
         <cpis-map/>
       </div>
     </div>

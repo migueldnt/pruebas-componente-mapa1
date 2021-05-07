@@ -1,4 +1,4 @@
-import {Fill, Stroke, Circle, Style} from 'ol/style';
+import {Fill, Stroke, Circle, Style, Icon} from 'ol/style';
 
 const equivalencias = {
     "fill":{
@@ -11,6 +11,10 @@ const equivalencias = {
     },
     "circle":{
         class:Circle,
+        key:"image"
+    },
+    "icon":{
+        class:Icon,
         key:"image"
     },
     "style":{

@@ -2,6 +2,7 @@
     <div class="dai-map-container">
         <div ref="mapa" class="mapa"></div>
         <div ref="tooltip" class="ol-tooltip ol-tooltip-bottom"><div class="content"></div></div>
+        <div ref="tooltipmov" class="ol-tooltipmov "><div class="content"></div></div>
         <div ref="popup" class="ol-popup"><div class="botones"><a class="boton-cerrar" @click="cerrarPopup">x</a></div><div class="content"></div></div>
         <slot></slot>
     </div>
@@ -102,13 +103,25 @@ export default {
         });
         overlay_tooltip.setPosition(undefined);
         this.map.addOverlay(overlay_tooltip);
+
+        //tooltipmov
+        let overlay_tooltip_mov = new Overlay({
+            id: "tooltipmov",
+            element: this.$refs.tooltipmov,
+            autoPan: false,
+            stopEvent: false,
+            positioning: "bottom-center",
+            
+        });
+        overlay_tooltip_mov.setPosition(undefined);
+        this.map.addOverlay(overlay_tooltip_mov);
         //popup popup
         let overlay_popup = new Overlay({
             id: "popup",
             element: this.$refs.popup,
             autoPan: false,
             stopEvent: true,
-            position: "center-center",
+            positioning: "center-center",
             insertFirst: false
         });
         overlay_popup.setPosition(undefined);
@@ -117,7 +130,8 @@ export default {
         //pointer move events
         this.map.on("pointermove",(evento)=>{
             let target= evento.originalEvent.target
-            if(target.tagName != "CANVAS"){
+            
+            if( target.classList.contains("ol-tooltip") || this.$refs.tooltip.contains(target) ){
                 return 
             }
             if (evento.dragging) {
