@@ -35,6 +35,10 @@ export default {
         _clicks:{
             type:Number,
             default:0
+        },
+        tooltipTop:{
+            type:Number,
+            default:0
         }
     },
     data:function(){
@@ -80,6 +84,7 @@ export default {
                 
                 layer.set("_tooltip",vm.tooltipContent)
                 layer.set("_tooltip_mov",vm.movibleTooltip)
+                layer.set("_tooltip_top",vm.tooltipTop)
                 
             }
 

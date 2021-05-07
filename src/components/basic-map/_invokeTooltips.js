@@ -39,6 +39,7 @@
                     tooltip_overlay_nomov.setPosition(undefined)
                 }else{
                     tooltip_overlay_mov.setPosition(undefined)
+                    tooltip_overlay_nomov.getElement().style.top = `${layer.get("_tooltip_top")}px`
                 }
 
                 //console.log(contenido,"es lo que acaba de pasar, este es el contenido a mandar en el tooltip")

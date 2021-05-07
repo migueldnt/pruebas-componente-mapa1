@@ -6,8 +6,8 @@
         </div>
         <dai-basic-map  class="dai-map" :maxZoom="18" 
             @resetView="resetMap"
-            :extent="[-118.365119934082,14.5320978164673,-86.7104034423828,32.7186546325684]">
-            <dai-xyz-layer :visible="xyz_visible" :opacity=".5" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_nolabels/{z}/{x}/{y}.png"/>
+            :extent="[-118.365119934082,14.5320978164673,-86.7104034423828,33.7186546325684]">
+            <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}.png"/>
             <dai-geojson-layer
                 id="estados"
                 :source="estadosLayer"
@@ -15,15 +15,24 @@
                 :opacity="1"
                 :movible-tooltip="true"
                 @click_feature="acercamiento_edo"
-                :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> Cantidad de centros: ${row.count_cpis}`"
+                :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> Cantidad de centros: ${row.count_cpis}<br>Cantidad de laboratorios: ${row.count_lab_nal}`"
                 />
-            <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_only_labels/{z}/{x}/{y}.png"/>
+            <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/light_only_labels/{z}/{x}/{y}.png"/>
             <dai-geojson-layer
                 id="cpis"
                 :source="cpisLayer"
                 :olstyle="cpis_style"
                 @click_feature="acercamiento_cpi"
+                :tooltipTop="-6"
                 :tooltipContent="popupCpis"/>
+
+            <dai-geojson-layer id="laboratorios"
+                :source="laboratoriosLayer"
+                :olstyle="labsStyle"
+                :tooltipContent="popupLabs"
+                @click_feature="acercamiento_cpi"
+                :tooltipTop="1"
+                />
             <button class="button-alterna-calles" :class="{'active':xyz_visible}" @click="xyz_visible=!xyz_visible">Ver mapa de calles</button>
         </dai-basic-map>
         
@@ -45,6 +54,9 @@ import DaiGeojsonLayer from "./basic-map/layers/geojson-layer"
 import DaiXyzLayer from "./basic-map/layers/xyz-layer"
 import estados from "../assets/capas/estados.json"
 import cpis from "../assets/capas/cpi_30abril21.json"
+import laboratorios from "../assets/capas/laboratorios.json"
+
+//laboratorios["features"] = laboratorios["features"].filter(feature=>feature.properties.estatus == "Activo")
 
 export default {
     components:{
@@ -54,6 +66,7 @@ export default {
         return{
             estadosLayer:estados,
             cpisLayer:cpis,
+            laboratoriosLayer : laboratorios,
             xyz_visible:false,
             cpiHoverActual:null,
             popupCpis:(row)=>{
@@ -63,6 +76,11 @@ export default {
                 let pagina = `<a target="_blank" href="${row.pagina}">${truncate(row.pagina,32)}</a>`;
                 this.cpiHoverActual=row.oid
                 return `<div><img src="logos/${row.logo}" class="icon-cpi"></div><strong>${row.descripcio}</strong><br>${nuevaDireccion}<br>Telefono: ${telefono}<br>${pagina}`
+            },
+            popupLabs:row=>{
+                let pagina = row.pagina ?`<a target="_blank" href="${row.pagina}">${truncate(row.pagina,32)}</a>` : '';
+                let siglas= row.siglas ? `${row.siglas}, ` : ''
+                return `<strong style="white-space:normal">${row.nom_lab_nal}</strong><br> ${siglas} ${row.instit_responsable}<br>Instituciones asociadas: ${row.numero_instituc_asociadas}<br> ${row.instit_asociadas}<br> ${pagina}`
             },
             estados_style:{
                 style:{
@@ -84,17 +102,31 @@ export default {
                     }
                     
                 }
+            },
+            labsStyle:{
+                style:{
+                    circle:{
+                        radius: 6,
+                        stroke:{
+                            color:"gray",
+                            width: 1
+                        },
+                        fill:{
+                            color:"white"
+                        }
+                    }
+                }
             }
         }
     },
     methods:{
         acercamiento_cpi:function(){
             this.xyz_visible = true;
-            console.log("se acerco al cpi")
+            //console.log("se acerco al cpi")
         },
         acercamiento_edo:function(){
             this.xyz_visible = false;
-            console.log("se acerco al estado")
+            //console.log("se acerco al estado")
         },
         resetMap:function(){
             this.xyz_visible = false;
