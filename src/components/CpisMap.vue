@@ -24,6 +24,7 @@
                 :olstyle="cpis_style"
                 @click_feature="acercamiento_cpi"
                 :tooltipTop="-6"
+                :visible="visible_cpis"
                 :tooltipContent="popupCpis"/>
 
             <dai-geojson-layer id="laboratorios"
@@ -31,14 +32,19 @@
                 :olstyle="labsStyle"
                 :tooltipContent="popupLabs"
                 @click_feature="acercamiento_cpi"
+                :visible="visible_labs"
                 :tooltipTop="2"
                 />
             <button class="button-alterna-calles" :class="{'active':xyz_visible}" @click="xyz_visible=!xyz_visible">Ver mapa de calles</button>
             <div class="leyenda">
-                <div class="item-leyenda">
+                <div class="item-leyenda" 
+                    :class="{'active':visible_cpis}"
+                    @click="visible_cpis =!visible_cpis">
                     <span class="icon-pin"></span> Centros Públicos de Investigación
                 </div>
-                <div class="item-leyenda">
+                <div class="item-leyenda" 
+                    :class="{'active':visible_labs}"
+                    @click="visible_labs =!visible_labs">
                     <i class="icon-circle"></i> Laboratorios Nacionales
                 </div>
             </div>
@@ -77,6 +83,8 @@ export default {
             laboratoriosLayer : laboratorios,
             xyz_visible:false,
             cpiHoverActual:null,
+            visible_cpis:true,
+            visible_labs:true,
             popupCpis:(row)=>{
                 //preparar la direccion 
                 let nuevaDireccion = formatoDireccion(row.direccion)
@@ -250,7 +258,15 @@ function truncate(str, n){
     border-radius: 5px;
     .item-leyenda{
         font-size: 13px;
-        color: white;
+        color: #bcbbbb;
+        cursor:pointer;
+        -webkit-user-select: none; /* Safari */        
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
+        &.active{
+            color: white;
+        }
         .icon-pin:before{
             content:'';
             width: 18px;
