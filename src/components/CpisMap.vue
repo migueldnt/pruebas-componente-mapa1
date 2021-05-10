@@ -86,9 +86,11 @@ export default {
                 return `<div><img src="logos/${row.logo}" class="icon-cpi"></div><strong>${row.descripcio}</strong><br>${nuevaDireccion}<br>Telefono: ${telefono}<br>${pagina}`
             },
             popupLabs:row=>{
+                let logo = row.logos == "Sin Logo" ? '' :`<div><img src="logos/laboratorios/${row.logos}" class="icon-cpi"></div>`
                 let pagina = row.pagina ?`<a target="_blank" href="${row.pagina}">${truncate(row.pagina,32)}</a>` : '';
                 let siglas= row.siglas ? `${row.siglas}, ` : ''
-                return `<strong style="white-space:normal">${row.nom_lab_nal}</strong><br> ${siglas} ${row.instit_responsable}<br>Instituciones asociadas: ${row.numero_instituc_asociadas}<br> ${row.instit_asociadas}<br> ${pagina}`
+                let instituciones_aso = row.instit_aso ? `<br>${row.instit_aso}` : '' ;
+                return `${logo}<strong style="white-space:normal">${row.nom_lab_na}</strong><br> ${siglas} ${row.instit_res}<br>Instituciones asociadas: ${row.numero_ins} ${instituciones_aso} <br> ${pagina}`
             },
             estados_style:{
                 style:{
