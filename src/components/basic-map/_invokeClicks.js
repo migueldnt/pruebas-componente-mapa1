@@ -39,9 +39,9 @@
             component.layers[id].$emit("click_feature",f_l)
             hightlight_on_click(feature)
             if(feature.getGeometry().getType()=="Point"){
-                map.getView().animate({center:feature.getGeometry().getCoordinates(),zoom:15,duration:500})
+                map.getView().animate({center:feature.getGeometry().getCoordinates(),zoom:13.5,duration:500})
             }else{
-                map.getView().fit(feature.getGeometry(),{duration:500})
+                map.getView().fit(feature.getGeometry(),{duration:500,padding:[25,25,25,25]})
             }
             
 

@@ -6,8 +6,8 @@
     
         <dai-basic-map  class="dai-map" :maxZoom="18" 
             @resetView="resetMap"
-            :extent="[-118.365119934082,14.5320978164673,-86.7104034423828,32.7186546325684]">
-            <dai-xyz-layer :visible="xyz_visible" :opacity=".5" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_nolabels/{z}/{x}/{y}.png"/>
+            :extent="[-118.365119934082,14.5320978164673,-86.7104034423828,33.7186546325684]">
+            <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/light_nolabels/{z}/{x}/{y}.png"/>
             <dai-geojson-layer
                 id="estados"
                 :source="estadosLayer"
@@ -15,16 +15,39 @@
                 :opacity="1"
                 :movible-tooltip="true"
                 @click_feature="acercamiento_edo"
-                :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> Cantidad de centros: ${row.count_cpis}`"
+                :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> CPI: ${row.count_cpis}<br>Laboratorios Nacionales: ${row.count_lab_nal}`"
                 />
-            <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/dark_only_labels/{z}/{x}/{y}.png"/>
+            <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/light_only_labels/{z}/{x}/{y}.png"/>
             <dai-geojson-layer
                 id="cpis"
                 :source="cpisLayer"
                 :olstyle="cpis_style"
                 @click_feature="acercamiento_cpi"
+                :tooltipTop="-6"
+                :visible="visible_cpis"
                 :tooltipContent="popupCpis"/>
+
+            <dai-geojson-layer id="laboratorios"
+                :source="laboratoriosLayer"
+                :olstyle="labsStyle"
+                :tooltipContent="popupLabs"
+                @click_feature="acercamiento_cpi"
+                :visible="visible_labs"
+                :tooltipTop="2"
+                />
             <button class="button-alterna-calles" :class="{'active':xyz_visible}" @click="xyz_visible=!xyz_visible">Ver mapa de calles</button>
+            <div class="leyenda">
+                <div class="item-leyenda" 
+                    :class="{'active':visible_cpis}"
+                    @click="visible_cpis =!visible_cpis">
+                    <span class="icon-pin"></span> Centros Públicos de Investigación
+                </div>
+                <div class="item-leyenda" 
+                    :class="{'active':visible_labs}"
+                    @click="visible_labs =!visible_labs">
+                    <i class="icon-circle"></i> Laboratorios Nacionales
+                </div>
+            </div>
         </dai-basic-map>
         
             
@@ -38,6 +61,9 @@ import DaiGeojsonLayer from "./basic-map/layers/geojson-layer"
 import DaiXyzLayer from "./basic-map/layers/xyz-layer"
 import estados from "../assets/capas/estados.json"
 import cpis from "../assets/capas/cpi_30abril21.json"
+import laboratorios from "../assets/capas/laboratorios.json"
+
+//laboratorios["features"] = laboratorios["features"].filter(feature=>feature.properties.estatus == "Activo")
 
 export default {
     components:{
@@ -47,8 +73,11 @@ export default {
         return{
             estadosLayer:estados,
             cpisLayer:cpis,
+            laboratoriosLayer : laboratorios,
             xyz_visible:false,
             cpiHoverActual:null,
+            visible_cpis:true,
+            visible_labs:true,
             popupCpis:(row)=>{
                 //preparar la direccion 
                 let nuevaDireccion = formatoDireccion(row.direccion)
@@ -56,6 +85,13 @@ export default {
                 let pagina = `<a target="_blank" href="${row.pagina}">${truncate(row.pagina,32)}</a>`;
                 this.cpiHoverActual=row.oid
                 return `<div><img src="logos/${row.logo}" class="icon-cpi"></div><strong>${row.descripcio}</strong><br>${nuevaDireccion}<br>Telefono: ${telefono}<br>${pagina}`
+            },
+            popupLabs:row=>{
+                let logo = row.logos == "Sin Logo" ? '' :`<div><img src="logos/laboratorios/${row.logos}" class="icon-cpi"></div>`
+                let pagina = row.pagina ?`<a target="_blank" href="${row.pagina}">${truncate(row.pagina,32)}</a>` : '';
+                let siglas= row.siglas ? `${row.siglas}, ` : ''
+                let instituciones_aso = row.instit_aso ? `<br>${row.instit_aso}` : '' ;
+                return `${logo}<strong style="white-space:normal">${row.nom_lab_na}</strong><br> ${siglas} ${row.instit_res}<br>Instituciones asociadas: ${row.numero_ins} ${instituciones_aso} <br> ${pagina}`
             },
             estados_style:{
                 style:{
@@ -71,11 +107,25 @@ export default {
                         anchorXUnits: 'fraction',
                         anchorYUnits: 'fraction',
                         src: 'logos/puntero-mapa.svg',
-                        scale:.4,
+                        //scale:.4,
                         offset: [0,0],
                         //size: [40,40]
                     }
                     
+                }
+            },
+            labsStyle:{
+                style:{
+                    circle:{
+                        radius: 6,
+                        stroke:{
+                            color:"gray",
+                            width: 1
+                        },
+                        fill:{
+                            color:"white"
+                        }
+                    }
                 }
             }
         }
@@ -83,11 +133,11 @@ export default {
     methods:{
         acercamiento_cpi:function(){
             this.xyz_visible = true;
-            console.log("se acerco al cpi")
+            //console.log("se acerco al cpi")
         },
         acercamiento_edo:function(){
             this.xyz_visible = false;
-            console.log("se acerco al estado")
+            //console.log("se acerco al estado")
         },
         resetMap:function(){
             this.xyz_visible = false;
@@ -190,6 +240,50 @@ function truncate(str, n){
     cursor: pointer;
     &.active{
         border-style: solid;
+    }
+}
+.leyenda{
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    background-color: #0062FF;
+    padding: .3rem;
+    border-radius: 5px;
+    .item-leyenda{
+        font-size: 13px;
+        color: #bcbbbb;
+        cursor:pointer;
+        -webkit-user-select: none; /* Safari */        
+        -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* IE10+/Edge */
+        user-select: none; /* Standard */
+        &.active{
+            color: white;
+        }
+        .icon-pin:before{
+            content:'';
+            width: 18px;
+            height: 18px;
+            background-image: url(/logos/puntero-mapa.svg) ;
+            top: 4px;
+            left: 0px;
+            display: inline-block;
+            background-size: cover;
+            position: relative;
+        }
+        .icon-circle:before{
+            content:'';
+            width: 11px;
+            height: 11px;
+            background-color: white;
+            top: 2px;
+            left: 4px;
+            margin-right: 6px;
+            display: inline-block;
+            //background-size: cover;
+            position: relative;
+            border-radius: 50%;
+        }
     }
 }
 </style>
