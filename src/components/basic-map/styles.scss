@@ -1,6 +1,14 @@
 @charset "utf-8";
 
 @font-face {
+    font-family: "Montserrat";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../../assets/fonts/Montserrat-Regular.ttf");
+}
+
+@font-face {
     font-family: "icons";
     src:url("fonts/icons.eot");
     src:url("fonts/icons.eot?#iefix") format("embedded-opentype"),
@@ -31,10 +39,10 @@
     right: .5rem;
     bottom: calc(.5rem + 62px);
     font-size: 10px;
-    border-radius: 15px 15px 0 0;
-    button{
-        border-radius: 15px 15px 0 0;
-    }
+    //border-radius: 15px 15px 0 0;
+    //button{
+        //border-radius: 15px 15px 0 0;
+    //}
 }
 
 .ol-zoom{
@@ -42,10 +50,10 @@
     left: auto;
     bottom: .5rem;
     right: .5rem;
-    border-radius: 0 0 15px 15px;
-    button.ol-zoom-out{
-        border-radius: 0 0 15px 15px;
-    }
+    //border-radius: 0 0 15px 15px;
+    //button.ol-zoom-out{
+    //    border-radius: 0 0 15px 15px;
+    //}
     button.ol-zoom-in{
         border-radius: 0 ;
     }
@@ -62,3 +70,4 @@
 .ol-attribution{
     font-size: .8rem;
 }
+

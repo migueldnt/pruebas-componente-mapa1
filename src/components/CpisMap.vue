@@ -15,7 +15,7 @@
                 :opacity="1"
                 :movible-tooltip="true"
                 @click_feature="acercamiento_edo"
-                :tooltipContent="row=>`<strong>${row.nomgeo}</strong> <br> CPI: ${row.count_cpis}<br>Laboratorios Nacionales: ${row.count_lab_nal}`"
+                :tooltipContent="newPopupEstados"
                 />
             <dai-xyz-layer :visible="xyz_visible" :opacity="1" xyz-url="https://{a-c}.basemaps.cartocdn.com/rastertiles/light_only_labels/{z}/{x}/{y}.png"/>
             <dai-geojson-layer
@@ -25,38 +25,36 @@
                 @click_feature="acercamiento_cpi"
                 :tooltipTop="-6"
                 :visible="visible_cpis"
-                :tooltipContent="popupCpis"/>
+                :tooltipContent="newPopupCpis"/>
 
             <dai-geojson-layer id="laboratorios"
                 :source="laboratoriosLayer"
                 :olstyle="labsStyle"
-                :tooltipContent="popupLabs"
+                :tooltipContent="newPopupLabs"
                 @click_feature="acercamiento_cpi"
                 :visible="visible_labs"
-                :tooltipTop="2"
+                :tooltipTop="-6"
                 />
-            <button class="button-alterna-calles" :class="{'active':xyz_visible}" @click="xyz_visible=!xyz_visible">Ver mapa de calles</button>
+            
+            
             <div class="leyenda">
-                <div class="item-leyenda" 
-                    :class="{'active':visible_cpis}"
-                    @click="visible_cpis =!visible_cpis">
-                    <span class="icon-pin"></span> Centros Públicos de Investigación
-                </div>
-                <div class="item-leyenda" 
-                    :class="{'active':visible_labs}"
-                    @click="visible_labs =!visible_labs">
-                    <i class="icon-circle"></i> Laboratorios Nacionales
-                </div>
+                <label class="item-leyenda cpis" >
+                    <input type="checkbox" v-model="visible_cpis">
+                    <span class="checkmark"></span> 
+                    <p>
+                        <span class="icon-pin"></span> 
+                        Centros Públicos de Investigación
+                    </p>
+                </label>
+                <label class="item-leyenda labs" >
+                    <input type="checkbox" v-model="visible_labs">
+                    <span class="checkmark"></span> 
+                    <p><i class="icon-pin2"></i> Laboratorios Nacionales</p>
+                </label>
             </div>
         </dai-basic-map>
         
-            <a href="#" class="footer-button">
-                <span>Centros Públicos de Investigación</span>
-                <div class="arrow-container">
-                    <div class="arrow"></div>
-                </div>
-                
-            </a>
+            
         
     </div>
     
@@ -93,17 +91,21 @@ export default {
                 this.cpiHoverActual=row.oid
                 return `<div><img src="logos/${row.logo}" class="icon-cpi"></div><strong>${row.descripcio}</strong><br>${nuevaDireccion}<br>Telefono: ${telefono}<br>${pagina}`
             },
+            newPopupCpis:"none",
             popupLabs:row=>{
                 let logo = row.logos == "Sin Logo" ? '' :`<div><img src="logos/laboratorios/${row.logos}" class="icon-cpi"></div>`
                 let pagina = row.pagina ?`<a target="_blank" href="${row.pagina}">${truncate(row.pagina,32)}</a>` : '';
                 let siglas= row.siglas ? `${row.siglas}, ` : ''
-                let instituciones_aso = row.instit_aso ? `<br>${row.instit_aso}` : '' ;
+                let instituciones_aso = row.instit_aso ? `<br><span style="white-space:normal">${row.instit_aso}</span>` : '' ;
                 return `${logo}<strong style="white-space:normal">${row.nom_lab_na}</strong><br> ${siglas} ${row.instit_res}<br>Instituciones asociadas: ${row.numero_ins} ${instituciones_aso} <br> ${pagina}`
             },
+            newPopupLabs:"none",
+            popupEstados:row=>`<strong>${row.nomgeo}</strong> <br> CPI: ${row.count_cpis}<br>Laboratorios Nacionales: ${row.count_lab_nal}`,
+            newPopupEstados:"none",
             estados_style:{
                 style:{
                     fill:{color:"#ffffff00"},
-                    stroke:{color:"white",width:1}
+                    stroke:{color:"gray",width:1}
                 }
             },
             cpis_style:{
@@ -113,7 +115,7 @@ export default {
                         anchorOrigin: "bottom-left",
                         anchorXUnits: 'fraction',
                         anchorYUnits: 'fraction',
-                        src: 'logos/puntero-mapa.svg',
+                        src: 'logos/puntero-mapa1.svg',
                         //scale:.4,
                         offset: [0,0],
                         //size: [40,40]
@@ -123,16 +125,17 @@ export default {
             },
             labsStyle:{
                 style:{
-                    circle:{
-                        radius: 6,
-                        stroke:{
-                            color:"gray",
-                            width: 1
-                        },
-                        fill:{
-                            color:"white"
-                        }
+                    icon:{
+                        anchor:[.5,0],
+                        anchorOrigin: "bottom-left",
+                        anchorXUnits: 'fraction',
+                        anchorYUnits: 'fraction',
+                        src: 'logos/puntero-mapa2.svg',
+                        //scale:.4,
+                        offset: [0,0],
+                        //size: [40,40]
                     }
+                    
                 }
             }
         }
@@ -140,15 +143,23 @@ export default {
     methods:{
         acercamiento_cpi:function(){
             this.xyz_visible = true;
+            this.newPopupEstados = "none"
             //console.log("se acerco al cpi")
         },
         acercamiento_edo:function(){
-            this.xyz_visible = false;
+            this.xyz_visible = true;
+            this.newPopupEstados = this.popupEstados
             //console.log("se acerco al estado")
         },
         resetMap:function(){
             this.xyz_visible = false;
+            this.newPopupEstados = this.popupEstados
         }
+    },
+    mounted:function(){
+        this.newPopupCpis=this.popupCpis;
+        this.newPopupLabs= this.popupLabs;
+        this.newPopupEstados = this.popupEstados
     }
 }
 
@@ -178,18 +189,20 @@ function truncate(str, n){
 <style lang="scss" scoped>
 
 .custom-box{
-    background-color: #032663;
+    background-color: white;
     border-radius: 16px;
+    border: 1px solid #032663;
     .description{
         padding: 2rem 4rem;
-        color: white;
+        color: #002663;
         h4{
-            color:white 
+            color: #002663;
         }
+        
         
     }
     .footer-button{
-        color: white;
+        //color: white;
         padding: 1rem;
         display: flex;
         justify-content: space-between;
@@ -198,99 +211,158 @@ function truncate(str, n){
 
 .dai-map{
     height: 500px;
-    border-top: .5px solid white;
-    border-bottom: .5px solid white;
-}
-.arrow-container{
-    padding-top: .7rem;
-}
-.arrow {
-  background: #fff;
-  height: 3px;
-  width: 30px;
-  margin: 0 auto;
-  position: relative;
-  cursor: pointer;
-
-  &:before,
-  &:after {
-    content: "";
-    background: #fff;
-    position: absolute;
-    height: 3px;
-    width: 15px;
-  }
-
-  &:before {
-    right: -3px;
-    bottom: -4px;
-    transform: rotate(-45deg);
-  }
-
-  &:after {
-    right: -3px;
-    top: -4px;
-    transform: rotate(45deg);
-  }
+    border-top: .5px solid #032663;
+    //border-bottom: .5px solid #032663;
+    margin-bottom: 8px;
+    .ol-layer>canvas{
+        border-radius: 0 0 6px 6px;
+    }
 }
 
 .button-alterna-calles{
     position: absolute;
     left: .5rem;
     bottom: .5rem;
-    background-color: #0062FF;
+    background-color: #032663;
     color: white;
     border-color:white;
     border-width: 1px;
     border-style: hidden;
     border-radius: 3px;
     cursor: pointer;
+    padding: .5rem 2px;
     &.active{
         border-style: solid;
     }
 }
 .leyenda{
-    position: absolute;
+    //position: absolute;
     top: .5rem;
     right: .5rem;
-    background-color: #0062FF;
-    padding: .3rem;
-    border-radius: 5px;
+    //background-color: #0062FF;
+    padding: 1rem;
+    border-bottom: 1px solid #032663;
+
+    @media (min-width: 769px) {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0; //0 0 2rem;
+    }
     .item-leyenda{
-        font-size: 13px;
-        color: #bcbbbb;
+        display: block;
+        position: relative;
+
+        font-size: 15px;
+        color: black;
         cursor:pointer;
-        -webkit-user-select: none; /* Safari */        
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* IE10+/Edge */
-        user-select: none; /* Standard */
-        &.active{
-            color: white;
+        padding-left: 30px;
+        margin-bottom: 5px;
+
+        @media (min-width: 769px) {
+            margin:0;
+            padding-top: .5rem;
+            padding-bottom: .5rem;
+            padding-left: calc(30px + 2rem);
+            flex-grow: 1;
         }
+        input{
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+            &:checked~.checkmark {
+                background-color: #032663;
+            }
+        }
+
+        .checkmark{ 
+                position: absolute;
+                top: 5px;
+                left: 0;
+                height: 24px;
+                width: 24px;
+                background-color: #fff;
+                @media (min-width: 769px) {
+                    top: calc(.5rem + 5px);
+                    left:2rem
+                }
+                
+                &:after {
+                    content: "";
+                    position: absolute;
+                    display: none;
+                    left: 5px;
+                    top: 1px;
+                    width: 8px;
+                    height: 13px;
+                    border: solid white;
+                    border-width: 0 2px 2px 0;
+                    -webkit-transform: rotate(45deg);
+                    -ms-transform: rotate(45deg);
+                    transform: rotate(45deg);
+                }
+        }
+        
+        & input:checked~.checkmark:after {
+            display: block;
+        }
+
+       &.labs{
+           color:#9F2241;
+           .checkmark{
+               border: 3px solid #9F2241;
+           }
+           &:hover input~.checkmark {
+                background-color: #9f2241af;
+            }
+            input{
+                &:checked~.checkmark {
+                    background-color: #9F2241;
+                }
+            }
+            @media (min-width: 769px) {
+                border-left: 1px solid #032663;
+            }
+       }
+       &.cpis{
+           color:#414141;
+           .checkmark{
+               border: 3px solid #414141;
+           }
+           &:hover input~.checkmark {
+                background-color: #414141a4;
+            }
+            input{
+                &:checked~.checkmark {
+                    background-color: #414141;
+                }
+            }
+       }
         .icon-pin:before{
             content:'';
-            width: 18px;
-            height: 18px;
-            background-image: url(/logos/puntero-mapa.svg) ;
-            top: 4px;
+            width: 22px;
+            height: 22px;
+            background-image: url(/logos/puntero-mapa1.svg) ;
+            top: 5px;
             left: 0px;
             display: inline-block;
             background-size: cover;
             position: relative;
         }
-        .icon-circle:before{
+        .icon-pin2:before{
             content:'';
-            width: 11px;
-            height: 11px;
-            background-color: white;
-            top: 2px;
-            left: 4px;
-            margin-right: 6px;
+            width: 22px;
+            height: 22px;
+            background-image: url(/logos/puntero-mapa2.svg) ;
+            top: 5px;
+            left: 0px;
             display: inline-block;
-            //background-size: cover;
+            background-size: cover;
             position: relative;
-            border-radius: 50%;
         }
+        
     }
 }
 </style>

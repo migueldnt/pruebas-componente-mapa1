@@ -1,10 +1,15 @@
 <template>
     <div class="dai-map-container">
-        <div ref="mapa" class="mapa"></div>
-        <div ref="tooltip" class="ol-tooltip ol-tooltip-bottom"><div class="content"></div></div>
-        <div ref="tooltipmov" class="ol-tooltipmov "><div class="content"></div></div>
-        <div ref="popup" class="ol-popup"><div class="botones"><a class="boton-cerrar" @click="cerrarPopup">x</a></div><div class="content"></div></div>
         <slot></slot>
+        <div class="map-container">
+            <div ref="mapa" class="mapa"></div>
+            <div ref="tooltip" class="ol-tooltip ol-tooltip-bottom"><div class="content"></div></div>
+            <div ref="tooltipmov" class="ol-tooltipmov "><div class="content"></div></div>
+            <div ref="popup" class="ol-popup"><div class="botones"><a class="boton-cerrar" @click="cerrarPopup">x</a></div><div class="content"></div></div>
+            <slot name="inside-map"></slot>
+        </div>
+        
+        
     </div>
 </template>
 
@@ -139,7 +144,7 @@ export default {
             }
             invoke_tooltips(this.map, evento)
         })
-        this.map.on("click",(e)=>{
+        this.map.on("singleclick",(e)=>{
             invoke_clicks(this.map,e,this)
             
         })
@@ -184,7 +189,17 @@ export default {
 .dai-map-container{
     min-height: 200px;
     min-width: 200px;
+    /*position: relative;*/
+    display: flex;
+    flex-direction: column;
+
+}
+.map-container{
     position: relative;
+    height: -moz-available;          /* WebKit-based browsers will ignore this. */
+    height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    height: fill-available;
+    width: 100%;
 }
 .mapa{
     width: 100%;
@@ -196,7 +211,7 @@ export default {
 <style>
 
 .ol-control button{
-    background-color: #0062FF;
+    background-color: #002663;
     cursor: pointer;
     width: 30px;
     height: 30px;
