@@ -22,6 +22,7 @@
             var layer = f_l[1];
             var feature = f_l[0];
             if(map.hover_feature == feature && !layer.get("_tooltip_mov") ){
+                //console.log(map.hover_feature == feature , !layer.get("_tooltip_mov"))
                 return 
             }
             if (capas_con_tooltip.includes(layer.get("id")) &&  layer.get("_tooltip")!=undefined ) {

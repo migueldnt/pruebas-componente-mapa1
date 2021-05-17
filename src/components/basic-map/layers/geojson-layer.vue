@@ -104,13 +104,13 @@ export default {
                 if(nValue!="none"){
                     
                     this.olLayer.set("_tooltip",nValue)
-                    this.olLayer.set("_tooltip_mov",this.movibleTooltip)
-                    this.olLayer.set("_tooltip_top",this.tooltipTop)
+                    //this.olLayer.set("_tooltip_mov",this.movibleTooltip)
+                    //this.olLayer.set("_tooltip_top",this.tooltipTop)
                     
                 }else{
                     this.olLayer.set("_tooltip",undefined)
-                    this.olLayer.set("_tooltip_mov",undefined)
-                    this.olLayer.set("_tooltip_top",undefined)
+                    //this.olLayer.set("_tooltip_mov",undefined)
+                    //this.olLayer.set("_tooltip_top",undefined)
                 }
             }
             
