@@ -143,12 +143,12 @@ export default {
     methods:{
         acercamiento_cpi:function(){
             this.xyz_visible = true;
-            this.newPopupEstados = "none"
+            this.newPopupEstados = "none";
             //console.log("se acerco al cpi")
         },
         acercamiento_edo:function(){
             this.xyz_visible = true;
-            this.newPopupEstados = this.popupEstados
+            this.newPopupEstados = "none"; //this.popupEstados
             //console.log("se acerco al estado")
         },
         resetMap:function(){
