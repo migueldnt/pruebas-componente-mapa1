@@ -44,12 +44,19 @@
                     <p>
                         <span class="icon-pin"></span> 
                         Centros Públicos de Investigación
+                        
+                        <a href="descargas/centros_publicos_investigacion.zip" download><span class="dai-icon dai-icon-download"></span></a>
                     </p>
                 </label>
                 <label class="item-leyenda labs" >
                     <input type="checkbox" v-model="visible_labs">
                     <span class="checkmark"></span> 
-                    <p><i class="icon-pin2"></i> Laboratorios Nacionales</p>
+                    <p>
+                        <i class="icon-pin2"></i> 
+                        Laboratorios Nacionales
+                        
+                        <a href="descargas/laboratorios_nacionales.zip" download><span class="dai-icon dai-icon-download"></span></a>
+                    </p>
                 </label>
             </div>
         </dai-basic-map>
@@ -266,6 +273,12 @@ function truncate(str, n){
             padding-left: calc(30px + 2rem);
             flex-grow: 1;
         }
+        a{
+            color: inherit;
+            &:hover{
+                text-shadow: 3px 0px 4px #a7a7a7;
+            }
+        }
         input{
             position: absolute;
             opacity: 0;
@@ -276,6 +289,7 @@ function truncate(str, n){
                 background-color: #032663;
             }
         }
+        
 
         .checkmark{ 
                 position: absolute;
